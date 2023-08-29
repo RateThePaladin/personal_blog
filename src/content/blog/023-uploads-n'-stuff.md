@@ -43,7 +43,7 @@ public func webView(_ webView: WKWebView, runOpenPanelWith parameters: WKOpenPan
 
 At this point, I would recommend putting in some breakpoints and playing around with when it triggers. A great way to test this functionality is [with https://arie.ls/filetest/](https://arie.ls/filetest/). This site checks for upload capabilities and will trigger our breakpoints when clicking the 'choose file' button. Here's what that looks like:
 
-![screenshot](https://experiments.gg/images/robert/23/6.jpeg)
+![screenshot](https://experiments.gg/images/23/6.jpeg)
 
 Ok, the last bit is the NSOpenPanel that I mentioned above. This code is very similar to the NSSavePanel that I mentioned with the download functionality, but it's just a really easy way to open Apple's built-in panels. Here's the code:
 

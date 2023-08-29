@@ -84,7 +84,7 @@ Most of this is the standard Xcode build stuff I've mentioned before, but there 
 
 ##### git-ing tags
 So now that we have the pipeline setup to build from specific tags, how to we go about adding said tags to a specific commit when we want to run the pipeline? If you're fine doing it manually you can actually do so from within the Github desktop app. Just go to the repo, click on the activity view, right click on the commit and click add tag. That'll look like this:
-![github](/images/robert/81/Github_Tag.png)
+![github](/images/81/Github_Tag.png)
 
 If the tag you create matches the regex we specified in the pipeline, the build will start. But what are the values after the deploy- value, I hear you ask. Well one thing about Github tags that I haven't mentioned yet is that they all need to be unique. That's a bit of a bummer if you're doing it manually because it means keeping track of a whole bunch of random info, and it's difficult to correlate a tag with a commit when looking back. Instead, let's use a handy already computer value called the 'short git version hash'. This is a short, cute, and unique little string that gets computed automatically on every commit. These elements make it the perfect thing to use as our tag. 
 

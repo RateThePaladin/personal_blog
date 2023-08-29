@@ -29,7 +29,7 @@ What I want to build is a defense system of sorts. When working with the pending
 
 Before transactions get picked up by a node and validated, they hang out in the queued or pending pool for a bit. Usually once they're there, there's very little you can do to stop the transaction from getting picked up. What you can do, however, is get the nonce value of the transaction. And the handy thing about two transactions with the same nonce is that the new one will override the old one, no matter what the content of the transaction. This means that, if we're fast, we can stop any transfers going out of a given wallet by overriding the transaction with a zero value transfer and the same nonce while it's still in the pending pool. This method would have a couple drawbacks, such as spending gas to override every pending transaction and requiring a user's private keys to submit a new zero value transaction on their behalf. Despite these drawbacks, I believe this feature could offer significant value to high value wallets who want an added layer of security for their assets.
 
-![missile-defense](/images/robert/54/missile-def.png)
+![missile-defense](/images/54/missile-def.png)
 
 I like to think of this system kinda like a counter missile system, like the iron dome. Instead of trying the prevent the transactions from happening in the first place, we monitor a specific area for a transaction and then shoot it down before it can leave the pending pool.
 

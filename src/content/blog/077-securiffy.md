@@ -27,10 +27,10 @@ Our goal here is to prove that the client is an instance of dub and that our ser
 
 ##### certificate pinning
 Certificate pinning, or SSL pinning, is a way of associating a given host with it's certificate or public key. Basically, it's our way of telling swift that every time we're talking to a given host, that host should have a specified certificate. So why is this helpful? Well we can use it to solve our server validation problem. Even if someone steps between an instance of our browser and our server and attempts to serve back bad data, the app will drop the connection because it won't have the associated certificate. 
-![database](/images/robert/77/diagram.png)
+![database](/images/77/diagram.png)
 
 One of the best open source packages for handling certificate pinning in swift is TrustKit. It's actually more of an open source framework than a package, but it allows you to do everything from simple SSL pinning policies to ''Auto-pinning functionality by swizzling the App's _NSURLConnection_ and _NSURLSession_ delegates in order to automatically add pinning validation to the App's HTTPS connections" - Github repo. Check out their repo by clicking on the embed below:
-[![meme](/images/robert/77/github_embed.png)](https://github.com/datatheorem/TrustKit)
+[![meme](/images/77/github_embed.png)](https://github.com/datatheorem/TrustKit)
 
 By implementing TrustKit in our project, we can be darn near sure that the server we're talking to is actually our server. Please note however that if your certificate was to expire or be renewed, your application would no longer accept any data from your server. This is especially bad because it would require you to release a new version of the app to fix, effectively bricking all old versions. 
 
@@ -44,7 +44,7 @@ So now that we know our server is valid, how do we authenticate that the client 
 Any secret var stored in the app can be revealed by a motivated attacker. When your app is decompiled a poorly obfuscated secret can be revealed by just running the strings command in MacOS. Even after properly scrambling the data with a salt it can still be recovered with enough effort. So what if we just didn't store any secrets in the client?
 
 Well, what's the alternative? Instead of making all of the API calls to the various services that your app relied on from within the application itself, let's just create a master API that acts as a proxy to all of your other APIs. Something like this:
-![database](/images/robert/77/proxy.png)
+![database](/images/77/proxy.png)
 ***Please note these are only examples***
 
 With this method we can keep all of our secrets on the server rather than on the client, remove the 'decompile and check' attack vector. 
