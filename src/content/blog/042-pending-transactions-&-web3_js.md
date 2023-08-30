@@ -1,15 +1,17 @@
 ---
-title: Pend TX && Web3.js
+title: pend tx && web3.js
 author: Robert
 pubDate: 2023-02-22
 number: '42'
 draft: false
 tags:
-- Progress
+- web3
+- express
 description: description
+heroImage: /images/42/hero.png
 ---
 ### réalisation
-<iframe width="560" height="315" src="https://www.youtube.com/embed/Vsy6z4Y4Eqw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="100%" height="300px" src="https://www.youtube.com/embed/hEgCgF9Xwx4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ### raison d'être
 Hey yall. This week's postable project is the ability to get pending transaction details from EVM blockchains. Sounds pretty easy right? Well, you'd be surprised. While the methods for fetching this data are well documented, the large majority of RPC providers like Infura and Alchemy expressly disable this feature as it's highly CPU and bandwidth-intensive. They couldn't make the economics work. This leaves a couple of options for determining if a transaction is still pending. 

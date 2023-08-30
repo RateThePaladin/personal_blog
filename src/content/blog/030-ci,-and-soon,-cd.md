@@ -1,15 +1,16 @@
 ---
-title: CI, and soon, CD
+title: ci, and soon, cd
 author: Robert
 pubDate: 2023-02-01
 number: '30'
 draft: false
 tags:
-- Dupdate
+- CI/CD
 description: description
+heroImage: /images/30/hero.png
 ---
 ### réalisation
-<iframe width="560" height="315" src="https://www.youtube.com/embed/guLOqdolHWY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+This post!
 
 ### raison d'être
 Hey yall. This week's postable project is the CI (and soon to be CD) pipeline for our new main repo. The goal is for any new code changes to automatically be pulled, built, archived, signed, notarized, and uploaded to an AWS S3 bucket. Full disclosure, the pipeline is not complete yet. I encountered many issues with xcode server, npm, and signatures in particular that ate up the majority of my time. Hopefully, the documentation steps here help someone avoid these issues in the future.

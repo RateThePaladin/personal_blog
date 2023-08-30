@@ -1,15 +1,15 @@
 ---
-title: NFT Transfers
+title: nft transfers w/ web3.swift
 author: Robert
 pubDate: 2023-01-25
 number: '26'
 draft: false
 tags:
-- Feature
+- web3
 description: description
 ---
 ### réalisation
-<iframe width="560" height="315" src="https://www.youtube.com/embed/4XjwQQCtWnU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="100%" height="300px" src="https://www.youtube.com/embed/IAZcAVXduCg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ### raison d'être
 Hey yall. This week's postable project is a handy dandy transfer function that we need to move NFTs and tokens between wallets. Yep, pretty fundamental. Also, this would have taken me an hour to write in javascript (or typescript) with thirdweb's sdk, but ended up taking me 2 days in swift. Ah, the joys of poor documentation. But hey, if yall ever need to do something similar, this writeup should make it mighty easy.

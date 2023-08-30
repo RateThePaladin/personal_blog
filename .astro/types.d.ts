@@ -282,9 +282,9 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
-"050-a-week-of-config.md": {
-	id: "050-a-week-of-config.md";
-  slug: "050-a-week-of-config";
+"050-building-a-buildpack.md": {
+	id: "050-building-a-buildpack.md";
+  slug: "050-building-a-buildpack";
   body: string;
   collection: "blog";
   data: InferEntrySchema<"blog">

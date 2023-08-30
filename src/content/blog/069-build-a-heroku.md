@@ -1,5 +1,5 @@
 ---
-title: Build-A-Heroku
+title: build-a-heroku
 author: Robert
 pubDate: 2023-04-12
 number: '69'
@@ -7,6 +7,7 @@ draft: false
 tags:
 - Exploration
 - Cloud
+- Security
 description: exploring
 featured: true
 heroImage: /images/69/hero.png

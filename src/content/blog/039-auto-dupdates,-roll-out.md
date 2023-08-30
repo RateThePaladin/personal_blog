@@ -1,12 +1,14 @@
 ---
-title: Auto Dupdates, Roll Out
+title: auto updates, roll out
 author: Robert
 pubDate: 2023-02-15
 number: '39'
 draft: false
 tags:
-- Dupdate
+- Xcode
+- Open Source
 description: description
+heroImage: /images/39/hero.png
 ---
 ### réalisation
 download [dub](https://downloads.dubdubdub.xyz/dub.dmg)
