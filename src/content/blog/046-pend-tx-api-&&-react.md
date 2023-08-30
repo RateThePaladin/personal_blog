@@ -1,17 +1,21 @@
 ---
-title: Pend Tx API && React
+title: pend tx api && react
 author: Robert
 pubDate: 2023-03-01
 number: '46'
 draft: false
 tags:
-- Feature
+- API
+- React
+- web3
 description: description
+heroImage: /images/46/hero.png
+featured: true
 ---
 ### réalisation
-<iframe width="560" height="315" src="https://www.youtube.com/embed/v1J16Tbjhno" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="100%" height="300px" src="https://www.youtube.com/embed/bl0mk5lOO5s" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-Check out the app [here](https://pending-tx-onmf546o3-dubdubdub-xyz.vercel.app)
+~~Check out the app [here](https://pending-tx-onmf546o3-dubdubdub-xyz.vercel.app)~~ App no longer hosted, check out the video above
 
 ### raison d'être
 Hey yall. This week's postable project is turning the pending tx data we can get from our Goerli node into a REST API. We wanted to do this so we could query the API's endpoint from dub to get back data on pending transactions. This will help us give users further insight into the current state of their transactions. Additionally, having the pending tx data can help diagnose failed transaction states. Instead of Uniswap's infinitely spinning 'pending' badge, we can show users the transaction and steps they can take to resolve any issues (aka bad nonce, low gas, bad hash, etc).

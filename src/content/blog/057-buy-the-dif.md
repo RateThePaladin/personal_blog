@@ -1,5 +1,5 @@
 ---
-title: Buy the dif
+title: buy the diff
 author: Robert
 pubDate: 2023-03-22
 number: '57'
