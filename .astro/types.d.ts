@@ -331,9 +331,9 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
-"077-securiffy.md": {
-	id: "077-securiffy.md";
-  slug: "077-securiffy";
+"077-cert-pinning-with-xcode.md": {
+	id: "077-cert-pinning-with-xcode.md";
+  slug: "077-cert-pinning-with-xcode";
   body: string;
   collection: "blog";
   data: InferEntrySchema<"blog">

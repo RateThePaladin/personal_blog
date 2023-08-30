@@ -1,18 +1,21 @@
 ---
-title: Uploads n' Stuff
+title: uploads n' stuff
 author: Robert
 pubDate: 2023-01-18
 number: '23'
 draft: false
 tags:
-- Feature
+- Xcode
 description: description
+heroImage: /images/23/hero.png
 ---
 ### réalisation
-The code below, and Dub v0.05 (coming next week).
+The code below, and Dub v0.05
 
 ### raison d'être
-Hey yall. This week's project is another core feature of the browser that we needed for the MVD, or Minimum Viable Dub. It's...uploads! As we know from HTML development, image uploads can be specified with the <input type="file"> syntax. But how does your browser parse the html to detect when an image form is being called, and thus prompts an upload dialog? That's what I'll be explaining here.
+Hey yall. This week's project is another core feature of the browser that we needed for the MVD, or Minimum Viable Dub. It's...uploads! As we know from HTML development, image uploads can be specified with the \<input type="file"> syntax. Here's what that looks like: 
+<input type="file"><br>
+But how does your browser parse the html to detect when an image form is being called, and thus know to prompt an upload dialog? That's what I'll be explaining here.
 
 ### le processus
 Our browser is built around a WKWebView, and thus we can use Apple's built-in upload panel called 'NSOpenPanel'. This panel is very easy to use and customize once you detect that an upload request has been triggered. The tricky part is listening for that prompt. As with downloads and the WKDownloadDelegate, uploads use the WKUIDelegate.
@@ -43,7 +46,7 @@ public func webView(_ webView: WKWebView, runOpenPanelWith parameters: WKOpenPan
 
 At this point, I would recommend putting in some breakpoints and playing around with when it triggers. A great way to test this functionality is [with https://arie.ls/filetest/](https://arie.ls/filetest/). This site checks for upload capabilities and will trigger our breakpoints when clicking the 'choose file' button. Here's what that looks like:
 
-![screenshot](https://experiments.gg/images/23/6.jpeg)
+![screenshot](/images/23/6.jpeg)
 
 Ok, the last bit is the NSOpenPanel that I mentioned above. This code is very similar to the NSSavePanel that I mentioned with the download functionality, but it's just a really easy way to open Apple's built-in panels. Here's the code:
 

@@ -1,12 +1,13 @@
 ---
-title: Downloads
+title: building downloads
 author: Robert
 pubDate: 2023-01-11
 number: '19'
 draft: false
 tags:
-- Feature
+- Xcode
 description: description
+heroImage: /images/19/hero.png
 ---
 ### réalisation
 The code below, and dub v0.0.4

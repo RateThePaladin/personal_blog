@@ -1,5 +1,5 @@
 ---
-title: CDz In Da House
+title: the great cd
 author: Robert
 pubDate: 2023-02-08
 number: '33'

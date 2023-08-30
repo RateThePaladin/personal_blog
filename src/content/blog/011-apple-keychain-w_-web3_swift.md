@@ -1,15 +1,15 @@
 ---
 # layout: ../../layouts/BlogPost.astro
-title: Apple Keychain w/ web3.swift
+title: apple keychain w/ web3.swift
 author: Robert
 pubDate: 2022-12-28
 number: '11'
 draft: false
 tags:
-- Feature
 - Xcode
 - web3
 description: description
+heroImage: /images/11/hero.png
 ---
 # Apple Keychain w/ web3.swift
 

@@ -6,8 +6,9 @@ number: '3'
 draft: false
 tags:
 - Exploration
+- web3
 description: description
-heroImage: /images/3/hero.jpg
+heroImage: /images/3/hero.png
 # featured: true
 ---
 # On Gasless

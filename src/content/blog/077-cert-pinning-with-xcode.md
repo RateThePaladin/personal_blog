@@ -1,5 +1,5 @@
 ---
-title: cert. pinning
+title: cert. pinning w/ xcode
 author: Robert
 pubDate: 2023-04-26
 number: '77'

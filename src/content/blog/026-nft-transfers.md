@@ -7,6 +7,7 @@ draft: false
 tags:
 - web3
 description: description
+heroImage: /images/26/hero.png
 ---
 ### réalisation
 <iframe width="100%" height="300px" src="https://www.youtube.com/embed/IAZcAVXduCg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
