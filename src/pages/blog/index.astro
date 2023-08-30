@@ -15,7 +15,6 @@ const posts = (await getCollection('blog')).sort(
   if (!a.data.featured && b.data.featured) {
     return -1;
   }
-  
   return a.data.pubDate.valueOf() - b.data.pubDate.valueOf();
 }
 );

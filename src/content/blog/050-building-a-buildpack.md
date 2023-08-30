@@ -10,6 +10,7 @@ tags:
 description: exploring
 heroImage: /images/50/hero.png
 featured: true
+# home: true
 ---
 
 ### réalisation
