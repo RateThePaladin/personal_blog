@@ -5,13 +5,15 @@ pubDate: 2023-04-19
 number: '73'
 draft: false
 tags:
-- Exploration
+- Security
+- web3
 description: exploring
 notes:
 - to add an image, add it to public/images, then use "![<alt-text-here](../../../public/images/image-name-here>.png)"
 - to like to another experiment, use: "[<text-here>](<file-name-here>)"
 - go to read view to see approximately what spacing will look like on the actual site
 - learn markdown and don't cry about it
+heroImage: /images/73/hero.png
 ---
 
 ### réalisation

@@ -44,6 +44,9 @@ const posts = (await getCollection('blog')).sort(
 				text-decoration: none;
 				transition: 0.2s ease;
 			}
+			ul li:first-child .date-and-tags {
+				justify-content: center;
+			}
 			ul li:first-child {
 				width: 100%;
 				margin-bottom: 1rem;
@@ -68,8 +71,12 @@ const posts = (await getCollection('blog')).sort(
 				line-height: 1;
 			}
 			.date {
-				margin: 0;
+				/* margin-right: 20; */
 				color: rgb(var(--gray));
+				padding: 0.2em 0.4em; /* Ensuring even padding to make them the same height */
+  				margin-right: 0.5em;
+				padding-left: 0;
+				margin-left: 0;
 			}
 			ul li a:hover h4,
 			ul li a:hover .date {
@@ -78,6 +85,28 @@ const posts = (await getCollection('blog')).sort(
 			ul a:hover img {
 				box-shadow: var(--box-shadow);
 			}
+			.date-and-tags {
+				display: flex;
+				align-items: center;
+				color: rgb(var(--gray));
+				justify-content: space-between; /* Left-align by default */
+			}
+			.tag-container {
+				display: flex;
+				align-items: center;
+			}
+			.tag{
+				color: rgb();
+				display: flex;
+				/* margin-bottom: 0.5em; */
+				padding: 0.2em 0.4em; /* Ensuring even padding to make them the same height */
+ 				margin-right: 0.5em;
+				background-color: #f3f3f3;  /* Light gray background */
+				color: #333;  /* Dark gray text */
+				border-radius: 4px;  /* Rounded corners */
+				margin-left: 0.5em;
+				/* margin: 4px */
+			}
 			@media (max-width: 720px) {
 				ul {
 					gap: 0.5em;
@@ -85,6 +114,7 @@ const posts = (await getCollection('blog')).sort(
 				ul li {
 					width: 100%;
 					text-align: center;
+					justify-content: center;
 				}
 				ul li:first-child {
 					margin-bottom: 0;
@@ -92,6 +122,37 @@ const posts = (await getCollection('blog')).sort(
 				ul li:first-child .title {
 					font-size: 1.563em;
 				}
+				ul li .postData{
+					justify-content: center;
+				}
+				.date-and-tags {
+					justify-content: center; /* Center-align date and tags on small screens */
+				}
+			}
+
+			@media (min-width: 720px) {
+				.tag-container {
+					display: flex;
+					align-items: center;
+					height: 100%;
+				}
+
+				.date, .tag {
+					display: flex;
+					align-items: center;
+					height: 100%; /* Make sure date and tags have the same height */
+				}
+			}
+
+			.postData{
+				display: flex;
+				align-items: center;
+				flex-wrap: wrap;
+				flex-direction: row;
+				align-content: space-between;
+				justify-content: left;
+				color: rgb(var(--gray));
+				flex-direction: column;
 			}
 		</style>
 	</head>
@@ -106,9 +167,20 @@ const posts = (await getCollection('blog')).sort(
 								<a href={`/blog/${post.slug}/`}>
 									<img width={720} height={360} src={post.data.heroImage} alt="" />
 									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
+									 
+									<div class="date-and-tags">
+										<div class="date">
+											<FormattedDate date={post.data.pubDate} />
+										</div>
+										<div class="tag-container">
+											{post.data.tags.map((tag) => (
+											<div class="tag">
+												#{tag}
+											</div>
+											))}
+										</div>
+									</div>
+										
 								</a>
 							</li>
 						))

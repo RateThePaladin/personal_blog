@@ -5,11 +5,14 @@ pubDate: 2023-02-08
 number: '33'
 draft: false
 tags:
-- Feature
+- DevOps
+- CI/CD
 description: description
+featured: true
+heroImage: /images/33/hero.png
 ---
 ### réalisation
-<iframe width="560" height="315" src="https://www.youtube.com/embed/x7NwXRIObOw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="100%" height="300px" src="https://www.youtube.com/embed/npB_ZhkPo7I" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ### raison d'être
 Hey yall. This week's postable project is the CD portion of our pipeline and the continuation of my post last week. The end goal of this pipeline is twofold: primarily, I want to enable a seamless developer experience as we move into our new repo. This means automating all signatures, builds, deployments, and notarization that are required to distribute a macos app. Secondly, I want to set our app up with the Sparkle framework to handle automatic updating. 
