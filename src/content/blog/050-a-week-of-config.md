@@ -1,21 +1,19 @@
 ---
-title: Configuring It Out
+title: building a buildpack
 author: Robert
 pubDate: 2023-03-08
 number: '50'
 draft: false
 tags:
-- Progress
+- Cloud
+- Open Source
 description: exploring
-notes:
-- to add an image, add it to public/images, then use "![<alt-text-here](../../../public/images/image-name-here>.png)"
-- to like to another experiment, use: "[<text-here>](<file-name-here>)"
-- go to read view to see approximately what spacing will look like on the actual site
-- learn markdown and don't cry about it
+heroImage: /images/50/hero.png
+featured: true
 ---
 
 ### réalisation
-![github repo preview image](/images/heroku-buildpack-cloud-sql-proxy.png)
+<!-- ![github repo preview image](/images/50/heroku-buildpack-cloud-sql-proxy.png) -->
 Check out the repo [here](https://github.com/RateThePaladin/heroku-buildpack-cloud-sql-proxy)
 
 ### raison d'être

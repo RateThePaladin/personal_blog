@@ -1,22 +1,20 @@
 ---
-title: cancel cancel cancel
+title: world's first
 author: Robert
 pubDate: 2023-03-29
 number: '61'
 draft: false
 tags:
-- Exploration
+- Security
+- web3
 description: exploring
-notes:
-- to add an image, add it to public/images, then use "![<alt-text-here](../../../public/images/image-name-here>.png)"
-- to like to another experiment, use: "[<text-here>](<file-name-here>)"
-- go to read view to see approximately what spacing will look like on the actual site
-- learn markdown and don't cry about it
+featured: true
+heroImage: /images/61/hero.png
 ---
 
 ### réalisation
 This post && a bunch of code
-<iframe width="560" height="315" src="https://www.youtube.com/embed/zvVYSwobDoA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+<iframe width="100%" height="300px" src="https://www.youtube.com/embed/cgm70MMTBJc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 ### raison d’être
 Hey y'all. This week’s post-able project is the realization of the [iron dome idea I wrote about in my experiment two weeks ago](54). The TL;DR from that post is that if we can detect transactions in the pending pool quickly enough, we can get the details and submit another transaction with the same nonce and higher gas to effectively cancel the first one we detected. The idea behind this feature is that we can effectively lock down a traditional EOA wallet by overriding any outbound transactions. What's more, because we can get all the details before a transaction leaves pending, we can selectively override any suspicious transactions. This could effectively function as a white list (or a blacklist) for all wallets being monitored. This would be so sick because it could save your bacon if you accidentally sign a malicious transaction. Ask Cam if you want to hear more about how easy it is to fall for one of these phishing attacks.

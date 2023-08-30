@@ -7,11 +7,7 @@ draft: false
 tags:
 - Exploration
 description: exploring
-notes:
-- to add an image, add it to public/images, then use "![<alt-text-here](../../../public/images/image-name-here>.png)"
-- to like to another experiment, use: "[<text-here>](<file-name-here>)"
-- go to read view to see approximately what spacing will look like on the actual site
-- learn markdown and don't cry about it
+heroImage: /images/57/hero.png
 ---
 
 ### réalisation
