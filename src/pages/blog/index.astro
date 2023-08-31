@@ -125,6 +125,43 @@ const tagsArray = Array.from(uniqueTags);
 				margin-left: 0.5em;
 				/* margin: 4px */
 			}
+			.postData{
+				display: flex;
+				align-items: center;
+				flex-wrap: wrap;
+				flex-direction: row;
+				align-content: space-between;
+				justify-content: left;
+				color: rgb(var(--gray));
+				flex-direction: column;
+			}
+			#tagFilterButtons{
+				margin-bottom: 20px;
+			}
+			.tagButton {
+				padding: 0.2em 0.4em;
+				background-color: #f3f3f3;
+				color: #333;
+				border-radius: 4px;
+				border: none;
+				cursor: pointer;
+				margin-right: 0.5em;
+				margin-bottom: 0.5em;
+				/* width: 100px; */
+				/* height: 50px; */
+				font-weight: 500;
+				font-size: 20pt;
+			}
+
+			.tagButton.selected {
+				/* background-color: #ccc; Darken the background when selected */
+				color: var(--accent);
+				box-shadow: var(--box-shadow);
+			}
+
+			.tagButton[data-tag="all"] {
+				margin-right: 1em; /* Optionally add more margin to the 'All' button */
+			}
 			@media (max-width: 720px) {
 				ul {
 					gap: 0.5em;
@@ -149,7 +186,7 @@ const tagsArray = Array.from(uniqueTags);
 				.tagButton{
 					padding: 6px 8px;
 					margin-right: 6px;
-					font-size: 12px;
+					font-size: 18px;
 				}
 			}
 
@@ -165,44 +202,6 @@ const tagsArray = Array.from(uniqueTags);
 					align-items: center;
 					height: 100%; /* Make sure date and tags have the same height */
 				}
-			}
-
-			.postData{
-				display: flex;
-				align-items: center;
-				flex-wrap: wrap;
-				flex-direction: row;
-				align-content: space-between;
-				justify-content: left;
-				color: rgb(var(--gray));
-				flex-direction: column;
-			}
-			#tagFilterButtons{
-				margin-bottom: 20px;
-			}
-			.tagButton {
-				padding: 0.2em 0.4em;
-				background-color: #ccc;
-				color: #333;
-				border-radius: 4px;
-				border: none;
-				cursor: pointer;
-				margin-right: 0.5em;
-				margin-bottom: 0.5em;
-				/* width: 100px; */
-				/* height: 50px; */
-				font-weight: 500;
-				font-size: 20pt;
-			}
-
-			.tagButton.selected {
-				background-color: #ccc; /* Darken the background when selected */
-				color: var(--accent);
-				box-shadow: var(--box-shadow);
-			}
-
-			.tagButton[data-tag="all"] {
-				margin-right: 1em; /* Optionally add more margin to the 'All' button */
 			}
 		</style>
 	</head>
