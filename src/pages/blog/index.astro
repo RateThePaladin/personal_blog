@@ -37,6 +37,7 @@ const tagsArray = Array.from(uniqueTags);
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 		<style>
 			main {
+				padding-top: 30px;
 				width: 960px;
 			}
 			ul {
@@ -171,7 +172,7 @@ const tagsArray = Array.from(uniqueTags);
 				color: rgb(var(--gray));
 				flex-direction: column;
 			}
-			#tagButtons{
+			#tagFilterButtons{
 				margin-bottom: 20px;
 			}
 			.tagButton {
@@ -242,6 +243,33 @@ const tagsArray = Array.from(uniqueTags);
 		<Footer />
 		<script>
 			document.addEventListener("DOMContentLoaded", function() {
+
+				// new goes here
+
+				function updateFirstPostClass() {
+					// Remove any existing "first-child" class
+					const existingFirst = document.querySelector(".first-child");
+					if (existingFirst) {
+						existingFirst.classList.remove("first-child");
+						const existingDateAndTags = existingFirst.querySelector(".date-and-tags");
+						if (existingDateAndTags) {
+						existingDateAndTags.style.justifyContent = 'space-between';
+						}
+					}
+
+					// Add the "first-child" class to the first visible li
+					const posts = Array.from(document.querySelectorAll("li"));
+					const firstVisiblePost = posts.find(post => post.style.display !== "none");
+					if (firstVisiblePost) {
+						firstVisiblePost.classList.add("first-child");
+						const dateAndTags = firstVisiblePost.querySelector(".date-and-tags");
+						if (dateAndTags) {
+						dateAndTags.style.justifyContent = 'center';
+						}
+					}
+				}
+
+					// old and working
 				const filterButtons = document.querySelectorAll(".tagButton");
 				const allTagButton = document.getElementById("tagButton-all");
 
@@ -261,6 +289,8 @@ const tagsArray = Array.from(uniqueTags);
 						post.style.display = "none";
 					}
 					});
+
+					updateFirstPostClass();
 				}
 
 				// Load tags from localStorage and set the selected tags or default to "all"
