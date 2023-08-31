@@ -125,7 +125,7 @@ const tagsArray = Array.from(uniqueTags);
 				margin-left: 0.5em;
 				/* margin: 4px */
 			}
-			/* @media (max-width: 720px) {
+			@media (max-width: 720px) {
 				ul {
 					gap: 0.5em;
 				}
@@ -146,7 +146,12 @@ const tagsArray = Array.from(uniqueTags);
 				.date-and-tags {
 					justify-content: center; /* Center-align date and tags on small screens */
 				}
-			} */
+				.tagButton{
+					padding: 6px 8px;
+					margin-right: 6px;
+					font-size: 12px;
+				}
+			}
 
 			@media (min-width: 720px) {
 				.tag-container {
@@ -290,7 +295,7 @@ const tagsArray = Array.from(uniqueTags);
 					}
 					});
 
-					updateFirstPostClass();
+					if (window.innerWidth > 720) {updateFirstPostClass();}
 				}
 
 				// Load tags from localStorage and set the selected tags or default to "all"
