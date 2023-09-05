@@ -140,7 +140,7 @@ const tagsArray = Array.from(uniqueTags);
 			}
 			.tagButton {
 				padding: 0.2em 0.4em;
-				background-color: #f3f3f3;
+				background-color: #e8e8e8;
 				color: #333;
 				border-radius: 4px;
 				border: none;
@@ -155,12 +155,16 @@ const tagsArray = Array.from(uniqueTags);
 
 			.tagButton.selected {
 				/* background-color: #ccc; Darken the background when selected */
+				background-color: #e8e8e8;
 				color: var(--accent);
 				box-shadow: var(--box-shadow);
 			}
 
 			.tagButton[data-tag="all"] {
 				margin-right: 1em; /* Optionally add more margin to the 'All' button */
+			}
+			.divider{
+				border-bottom: 1px dashed #bcbcbc;
 			}
 			@media (max-width: 720px) {
 				ul {
@@ -216,6 +220,7 @@ const tagsArray = Array.from(uniqueTags);
 					<button class="tagButton" data-tag={tag}>#{tag}</button>
 					))}
 				</div>
+				<hr class="divider">
 				<ul>
 					{
 						posts.map((post) => (
