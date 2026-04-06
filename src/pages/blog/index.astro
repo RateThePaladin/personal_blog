@@ -5,9 +5,18 @@ import Footer from '../../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
 import { getCollection } from 'astro:content';
 import FormattedDate from '../../components/FormattedDate.astro';
-import { getPostPath, getUniqueTags, sortPostsForBlogIndex } from '../../utils/blog';
+import {
+	buildPostSearchDocument,
+	getPostPath,
+	getUniqueTags,
+	sortPostsForBlogIndex,
+} from '../../utils/blog';
 
 const posts = sortPostsForBlogIndex(await getCollection('blog'));
+const searchablePosts = posts.map((post) => ({
+	post,
+	searchDocument: buildPostSearchDocument(post),
+}));
 const tagsArray = getUniqueTags(posts);
 ---
 
@@ -20,7 +29,203 @@ const tagsArray = getUniqueTags(posts);
 				padding-top: 30px;
 				width: 960px;
 			}
-			ul {
+			.filter-shell {
+				margin-bottom: 2rem;
+				padding: 1.5rem;
+				border: 1px solid rgba(var(--gray), 18%);
+				border-radius: 24px;
+				background:
+					radial-gradient(circle at top left, rgba(var(--gray-light), 75%), transparent 42%),
+					linear-gradient(145deg, rgba(255, 255, 255, 95%), rgba(var(--gray-light), 42%));
+				box-shadow: 0 18px 40px rgba(var(--gray), 14%);
+			}
+			.search-row {
+				display: flex;
+				flex-wrap: wrap;
+				align-items: center;
+				gap: 0.85rem;
+				margin-bottom: 1rem;
+				scroll-margin-top: 1.5rem;
+			}
+			.search-shell {
+				display: flex;
+				align-items: center;
+				flex: 1 1 22rem;
+				min-width: min(100%, 16rem);
+				padding: 0 1rem;
+				border: 1px solid rgba(var(--gray), 18%);
+				border-radius: 18px;
+				background: rgba(255, 255, 255, 92%);
+				box-shadow: 0 12px 28px rgba(var(--gray), 10%);
+				transition:
+					border-color 0.2s ease,
+					box-shadow 0.2s ease,
+					transform 0.2s ease;
+			}
+			.search-shell:focus-within {
+				transform: translateY(-1px);
+				border-color: rgb(35 55 255 / 0.3);
+				box-shadow: 0 16px 32px rgba(var(--gray), 14%);
+			}
+			.search-icon {
+				flex-shrink: 0;
+				color: rgb(var(--gray));
+				font-size: 1rem;
+			}
+			.search-input {
+				width: 100%;
+				padding: 0.95rem 0 0.95rem 0.75rem;
+				border: none;
+				background: transparent;
+				color: rgb(var(--black));
+				font: inherit;
+				font-size: 0.98rem;
+			}
+			.search-input::placeholder {
+				color: rgb(var(--gray));
+			}
+			.search-input:focus {
+				outline: none;
+			}
+			.search-clear {
+				padding: 0.78rem 1rem;
+				border: 1px solid rgba(var(--gray), 18%);
+				border-radius: 999px;
+				background: rgba(255, 255, 255, 88%);
+				color: rgb(var(--gray-dark));
+				cursor: pointer;
+				font: inherit;
+				font-size: 0.92rem;
+				font-weight: 700;
+				box-shadow: 0 8px 20px rgba(var(--gray), 10%);
+				transition:
+					transform 0.2s ease,
+					box-shadow 0.2s ease,
+					border-color 0.2s ease;
+			}
+			.search-clear:hover {
+				transform: translateY(-1px);
+				border-color: rgb(35 55 255 / 0.3);
+				box-shadow: 0 12px 24px rgba(var(--gray), 14%);
+			}
+			.search-clear:focus-visible {
+				outline: 3px solid rgb(35 55 255 / 0.24);
+				outline-offset: 2px;
+			}
+			.search-clear[hidden] {
+				display: none;
+			}
+			.filter-toolbar {
+				display: flex;
+				flex-wrap: wrap;
+				align-items: center;
+				justify-content: space-between;
+				gap: 1rem;
+			}
+			.filter-mobile-toggle {
+				display: none;
+			}
+			.filter-panel {
+				flex: 1 1 auto;
+			}
+			#tagFilterButtons {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.65rem;
+			}
+			.tagButton {
+				padding: 0.72rem 1rem;
+				border: 1px solid rgba(var(--gray), 20%);
+				border-radius: 999px;
+				background: rgba(255, 255, 255, 86%);
+				color: rgb(var(--gray-dark));
+				cursor: pointer;
+				font: inherit;
+				font-size: 0.92rem;
+				font-weight: 700;
+				line-height: 1;
+				box-shadow: 0 8px 20px rgba(var(--gray), 10%);
+				transition:
+					transform 0.2s ease,
+					box-shadow 0.2s ease,
+					background-color 0.2s ease,
+					border-color 0.2s ease,
+					color 0.2s ease;
+			}
+			.tagButton:hover {
+				transform: translateY(-1px);
+				border-color: rgb(35 55 255 / 0.3);
+				background: rgb(255 255 255);
+				box-shadow: 0 12px 24px rgba(var(--gray), 14%);
+			}
+			.tagButton:focus-visible {
+				outline: 3px solid rgb(35 55 255 / 0.24);
+				outline-offset: 2px;
+			}
+			.tagButton.selected {
+				border-color: rgb(var(--black));
+				background: rgb(var(--black));
+				color: white;
+				box-shadow: 0 16px 28px rgba(var(--black), 22%);
+			}
+			.tagButton[data-tag='all'] {
+				background: rgba(var(--gray-light), 88%);
+			}
+			.tagButton[data-tag='all'].selected {
+				background: var(--accent-dark);
+				border-color: var(--accent-dark);
+				color: white;
+			}
+			.filter-results {
+				display: flex;
+				flex-wrap: wrap;
+				align-items: center;
+				gap: 0.75rem;
+				margin: 0;
+				color: rgb(var(--gray-dark));
+				font-size: 0.95rem;
+			}
+			.filter-count,
+			.filter-selection {
+				display: inline-flex;
+				align-items: center;
+				min-height: 2.15rem;
+				padding: 0.35rem 0.85rem;
+				border-radius: 999px;
+				border: 1px solid rgba(var(--gray), 18%);
+				background: rgba(255, 255, 255, 82%);
+			}
+			.filter-count {
+				font-weight: 700;
+			}
+			.filter-selection {
+				color: var(--accent-dark);
+			}
+			.filter-search-summary[hidden] {
+				display: none;
+			}
+			.empty-state {
+				margin: 0 0 2rem;
+				padding: 1rem 1.25rem;
+				border: 1px dashed rgba(var(--gray), 36%);
+				border-radius: 18px;
+				background: rgba(var(--gray-light), 35%);
+				color: rgb(var(--gray-dark));
+			}
+			.empty-state[hidden] {
+				display: none;
+			}
+			.empty-state button {
+				margin-left: 0.5rem;
+				padding: 0;
+				border: none;
+				background: transparent;
+				color: var(--accent);
+				cursor: pointer;
+				font: inherit;
+				font-weight: 700;
+			}
+			.post-grid {
 				display: flex;
 				flex-wrap: wrap;
 				gap: 2rem;
@@ -28,35 +233,40 @@ const tagsArray = getUniqueTags(posts);
 				margin: 0;
 				padding: 0;
 			}
-			ul li {
+			.post-grid li {
 				width: calc(50% - 1rem);
 			}
-			ul li * {
+			.post-grid li * {
 				text-decoration: none;
 				transition: 0.2s ease;
 			}
-			ul li:first-child .date-and-tags {
+			.post-grid li:first-child .date-and-tags,
+			.post-grid li.first-child .date-and-tags {
 				justify-content: center;
 			}
-			ul li:first-child {
+			.post-grid li:first-child,
+			.post-grid li.first-child {
 				width: 100%;
 				margin-bottom: 1rem;
 				text-align: center;
 			}
-			ul li:first-child img {
+			.post-grid li:first-child img,
+			.post-grid li.first-child img {
 				width: 100%;
 			}
-			ul li:first-child .title {
+			.post-grid li:first-child .title,
+			.post-grid li.first-child .title {
 				font-size: 2.369rem;
 			}
-			ul li img {
+			.post-grid li img {
 				margin-bottom: 0.5rem;
 				border-radius: 12px;
 			}
-			ul li a {
+			.post-grid li a {
 				display: block;
+				color: inherit;
 			}
-			.first-child{
+			.first-child {
 				width: 100%;
 				margin-bottom: 1rem;
 				text-align: center;
@@ -75,11 +285,11 @@ const tagsArray = getUniqueTags(posts);
 				padding-left: 0;
 				margin-left: 0;
 			}
-			ul li a:hover h4,
-			ul li a:hover .date {
+			.post-grid li a:hover h4,
+			.post-grid li a:hover .date {
 				color: rgb(var(--accent));
 			}
-			ul a:hover img {
+			.post-grid a:hover img {
 				box-shadow: var(--box-shadow);
 			}
 			.date-and-tags {
@@ -92,18 +302,17 @@ const tagsArray = getUniqueTags(posts);
 			.tag-container {
 				display: flex;
 				align-items: center;
+				flex-wrap: wrap;
+				justify-content: end;
+				gap: 0.45rem;
 			}
-			.tag{
-				color: rgb();
+			.tag {
 				display: flex;
-				/* margin-bottom: 0.5em; */
 				padding: 0.2em 0.4em; /* Ensuring even padding to make them the same height */
- 				margin-right: 0.5em;
 				background-color: #f3f3f3;  /* Light gray background */
 				color: #333;  /* Dark gray text */
 				border-radius: 4px;  /* Rounded corners */
-				margin-left: 0.5em;
-				/* margin: 4px */
+				margin: 0;
 			}
 			.postData{
 				display: flex;
@@ -115,62 +324,95 @@ const tagsArray = getUniqueTags(posts);
 				color: rgb(var(--gray));
 				flex-direction: column;
 			}
-			#tagFilterButtons{
-				margin-bottom: 20px;
-			}
-			.tagButton {
-				padding: 0.2em 0.4em;
-				background-color: #e8e8e8;
-				color: #333;
-				border-radius: 4px;
-				border: none;
-				cursor: pointer;
-				margin-right: 0.5em;
-				margin-bottom: 0.5em;
-				/* width: 100px; */
-				/* height: 50px; */
-				font-weight: 500;
-				font-size: 20pt;
-			}
-
-			.tagButton.selected {
-				/* background-color: #ccc; Darken the background when selected */
-				background-color: #e8e8e8;
-				color: var(--accent);
-				box-shadow: var(--box-shadow);
-			}
-
-			.tagButton[data-tag="all"] {
-				margin-right: 1em; /* Optionally add more margin to the 'All' button */
-			}
-			.divider{
-				border-bottom: 1px dashed #bcbcbc;
-			}
 			@media (max-width: 720px) {
-				ul {
+				.filter-shell {
+					padding: 1.15rem;
+					border-radius: 20px;
+				}
+				.filter-toolbar {
+					align-items: stretch;
+				}
+				.filter-mobile-toggle {
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+					gap: 1rem;
+					width: 100%;
+					padding: 0.9rem 1rem;
+					border: 1px solid rgba(var(--gray), 18%);
+					border-radius: 18px;
+					background: rgba(255, 255, 255, 88%);
+					box-shadow: 0 10px 24px rgba(var(--gray), 10%);
+					color: rgb(var(--black));
+					font: inherit;
+					cursor: pointer;
+				}
+				.filter-mobile-toggle:focus-visible {
+					outline: 3px solid rgb(35 55 255 / 0.24);
+					outline-offset: 2px;
+				}
+				.filter-mobile-toggle-copy {
+					display: flex;
+					flex-direction: column;
+					align-items: start;
+					gap: 0.12rem;
+					text-align: left;
+				}
+				.filter-mobile-toggle-label {
+					font-size: 0.98rem;
+					font-weight: 700;
+					line-height: 1.1;
+				}
+				.filter-mobile-toggle-summary {
+					font-size: 0.84rem;
+					font-weight: 400;
+					line-height: 1.2;
+					color: rgb(var(--gray));
+				}
+				.filter-mobile-toggle-icon {
+					font-size: 1rem;
+					color: rgb(var(--gray-dark));
+					transition: transform 0.2s ease;
+				}
+				.filter-mobile-toggle[aria-expanded='true'] .filter-mobile-toggle-icon {
+					transform: rotate(180deg);
+				}
+				.filter-panel {
+					width: 100%;
+				}
+				.filter-panel[hidden] {
+					display: none;
+				}
+				.filter-results {
+					width: 100%;
+					gap: 0.55rem;
+					font-size: 0.9rem;
+				}
+				.post-grid {
 					gap: 0.5em;
 				}
-				ul li {
+				.post-grid li {
 					width: 100%;
 					text-align: center;
 					justify-content: center;
 				}
-				ul li:first-child {
+				.post-grid li:first-child,
+				.post-grid li.first-child {
 					margin-bottom: 0;
 				}
-				ul li:first-child .title {
+				.post-grid li:first-child .title,
+				.post-grid li.first-child .title {
 					font-size: 1.563em;
 				}
-				ul li .postData{
+				.post-grid li .postData {
 					justify-content: center;
 				}
 				.date-and-tags {
 					justify-content: center; /* Center-align date and tags on small screens */
 				}
-				.tagButton{
-					padding: 6px 8px;
-					margin-right: 6px;
-					font-size: 18px;
+				.tagButton {
+					padding: 0.7rem 0.9rem;
+					font-size: 0.9rem;
 				}
 			}
 
@@ -192,19 +434,62 @@ const tagsArray = getUniqueTags(posts);
 	<body>
 		<Header />
 		<main>
-				<section>
-
-				<div id="tagFilterButtons">
-					<button id="tagButton-all" class="tagButton selected" type="button" data-tag="all">#all</button>
-					{tagsArray.map((tag: string) => (
-					<button class="tagButton" type="button" data-tag={tag}>#{tag}</button>
-					))}
+			<section class="filter-shell" aria-label="Search and filter posts">
+				<div id="post-search" class="search-row">
+					<label class="search-shell" for="postSearchInput">
+						<span class="search-icon" aria-hidden="true">⌕</span>
+						<span class="sr-only">Search posts</span>
+						<input
+							id="postSearchInput"
+							class="search-input"
+							type="search"
+							inputmode="search"
+							autocomplete="off"
+							placeholder="Search titles, tags, and post text"
+						/>
+					</label>
+					<button id="clearSearchButton" class="search-clear" type="button" hidden>Clear</button>
 				</div>
-				<hr class="divider">
-				<ul>
+				<div class="filter-toolbar">
+					<button
+						id="mobileFilterToggle"
+						class="filter-mobile-toggle"
+						type="button"
+						aria-expanded="true"
+						aria-controls="filterPanel"
+					>
+						<span class="filter-mobile-toggle-copy">
+							<span class="filter-mobile-toggle-label">Filters</span>
+							<span id="mobileFilterToggleSummary" class="filter-mobile-toggle-summary">All tags</span>
+						</span>
+						<span class="filter-mobile-toggle-icon" aria-hidden="true">▾</span>
+					</button>
+					<div id="filterPanel" class="filter-panel">
+						<div id="tagFilterButtons" role="toolbar" aria-label="Filter posts by tag">
+							<button id="tagButton-all" class="tagButton selected" type="button" data-tag="all" aria-pressed="true">
+								All posts
+							</button>
+							{tagsArray.map((tag: string) => (
+								<button class="tagButton" type="button" data-tag={tag} aria-pressed="false">#{tag}</button>
+							))}
+						</div>
+					</div>
+					<p class="filter-results" aria-live="polite">
+						<span class="filter-count"><span id="filterResultsCount">{posts.length}</span>&nbsp;showing</span>
+						<span id="filterSelectionSummary" class="filter-selection">All tags</span>
+						<span id="filterSearchSummary" class="filter-selection filter-search-summary" hidden></span>
+					</p>
+				</div>
+			</section>
+			<p id="filterEmptyState" class="empty-state" hidden>
+				No posts match that search.
+				<button id="emptyStateReset" type="button">Reset search and filters</button>
+			</p>
+			<section>
+				<ul class="post-grid">
 					{
-						posts.map((post) => (
-							<li data-post-card>
+						searchablePosts.map(({ post, searchDocument }) => (
+							<li data-post-card data-search-document={searchDocument}>
 								<a href={getPostPath(post.id)}>
 									<img src={post.data.heroImage} alt="" />
 									<h4 class="title">{post.data.title}</h4>
@@ -224,7 +509,7 @@ const tagsArray = getUniqueTags(posts);
 										
 								</a>
 							</li>
-						))
+							))
 					}
 				</ul>
 			</section>
@@ -232,87 +517,289 @@ const tagsArray = getUniqueTags(posts);
 		<Footer />
 		<script>
 			document.addEventListener("DOMContentLoaded", function() {
-				function updateFirstPostClass() {
-					// Remove any existing "first-child" class
-					const existingFirst = document.querySelector<HTMLLIElement>(".first-child");
-					if (existingFirst) {
-						existingFirst.classList.remove("first-child");
-						const existingDateAndTags = existingFirst.querySelector<HTMLElement>(".date-and-tags");
-						if (existingDateAndTags) {
-						existingDateAndTags.style.justifyContent = 'space-between';
-						}
+				const storageKey = 'selectedTags';
+				const searchQueryParam = 'q';
+				const filterButtons = Array.from(document.querySelectorAll<HTMLButtonElement>(".tagButton"));
+				const allTagButton = document.querySelector<HTMLButtonElement>("#tagButton-all");
+				const individualTagButtons = filterButtons.filter((button) => button.dataset.tag !== "all");
+				const searchInput = document.querySelector<HTMLInputElement>("#postSearchInput");
+				const clearSearchButton = document.querySelector<HTMLButtonElement>("#clearSearchButton");
+				const mobileFilterToggle = document.querySelector<HTMLButtonElement>("#mobileFilterToggle");
+				const mobileFilterToggleSummary = document.querySelector<HTMLElement>("#mobileFilterToggleSummary");
+				const filterPanel = document.querySelector<HTMLElement>("#filterPanel");
+				const posts = Array.from(document.querySelectorAll<HTMLLIElement>("[data-post-card]"));
+				const filterResultsCount = document.querySelector<HTMLElement>("#filterResultsCount");
+				const filterSelectionSummary = document.querySelector<HTMLElement>("#filterSelectionSummary");
+				const filterSearchSummary = document.querySelector<HTMLElement>("#filterSearchSummary");
+				const emptyState = document.querySelector<HTMLElement>("#filterEmptyState");
+				const emptyStateReset = document.querySelector<HTMLButtonElement>("#emptyStateReset");
+				const mobileMediaQuery = window.matchMedia("(max-width: 720px)");
+				let mobileFiltersOpen = false;
+
+				function normalizeSearchQuery(value: string) {
+					return value
+						.toLowerCase()
+						.replace(/[^\p{L}\p{N}\s-]/gu, " ")
+						.replace(/\s+/g, " ")
+						.trim();
+				}
+
+				function getSearchQuery() {
+					return normalizeSearchQuery(searchInput?.value ?? "");
+				}
+
+				function getSearchDisplayText() {
+					return (searchInput?.value ?? "").replace(/\s+/g, " ").trim();
+				}
+
+				function getSelectedTags() {
+					return filterButtons
+						.filter((btn) => btn.classList.contains("selected"))
+						.map((btn) => btn.dataset.tag)
+						.filter((tag): tag is string => Boolean(tag));
+				}
+
+				function setAllSelected() {
+					filterButtons.forEach((button) => button.classList.remove("selected"));
+					allTagButton?.classList.add("selected");
+				}
+
+				function normalizeSelection() {
+					const selectedTags = getSelectedTags();
+					const selectedIndividualTags = selectedTags.filter((tag) => tag !== "all");
+
+					if (
+						selectedTags.length === 0 ||
+						selectedTags.includes("all") ||
+						selectedIndividualTags.length === individualTagButtons.length
+					) {
+						setAllSelected();
+					}
+				}
+
+				function syncButtonState() {
+					filterButtons.forEach((button) => {
+						button.setAttribute("aria-pressed", button.classList.contains("selected") ? "true" : "false");
+					});
+				}
+
+				function getFilterSummaryText(selectedTags: string[]) {
+					return selectedTags.includes("all")
+						? "All tags"
+						: selectedTags.map((tag) => `#${tag}`).join(" + ");
+				}
+
+				function getMobileToggleSummaryText(selectedTags: string[], searchQuery: string) {
+					const suffix = searchQuery ? " / search" : "";
+
+					if (selectedTags.includes("all")) {
+						return `All tags${suffix}`;
 					}
 
-					// Add the "first-child" class to the first visible li
-					const posts = Array.from(document.querySelectorAll<HTMLLIElement>("[data-post-card]"));
-					const firstVisiblePost = posts.find(post => post.style.display !== "none");
+					if (selectedTags.length === 1) {
+						return `#${selectedTags[0]}${suffix}`;
+					}
+
+					return `${selectedTags.length} tags selected${suffix}`;
+				}
+
+				function syncFilterPanelVisibility() {
+					const shouldShowPanel = mobileMediaQuery.matches ? mobileFiltersOpen : true;
+
+					if (filterPanel) {
+						filterPanel.hidden = !shouldShowPanel;
+					}
+
+					if (mobileFilterToggle) {
+						mobileFilterToggle.setAttribute("aria-expanded", shouldShowPanel ? "true" : "false");
+					}
+				}
+
+				function updateFeaturedPostLayout() {
+					posts.forEach((post) => {
+						post.classList.remove("first-child");
+						const dateAndTags = post.querySelector<HTMLElement>(".date-and-tags");
+						if (dateAndTags) {
+							dateAndTags.style.justifyContent = "";
+						}
+					});
+
+					if (window.innerWidth <= 720) {
+						return;
+					}
+
+					const firstVisiblePost = posts.find((post) => !post.hidden);
 					if (firstVisiblePost) {
 						firstVisiblePost.classList.add("first-child");
 						const dateAndTags = firstVisiblePost.querySelector<HTMLElement>(".date-and-tags");
 						if (dateAndTags) {
-						dateAndTags.style.justifyContent = 'center';
+							dateAndTags.style.justifyContent = "center";
 						}
 					}
 				}
 
-				const filterButtons = Array.from(document.querySelectorAll<HTMLButtonElement>(".tagButton"));
-				const allTagButton = document.getElementById("tagButton-all");
+				function updateFilterSummary(selectedTags: string[], visibleCount: number, searchQuery: string) {
+					if (filterResultsCount) {
+						filterResultsCount.textContent = String(visibleCount);
+					}
+
+					if (filterSelectionSummary) {
+						filterSelectionSummary.textContent = getFilterSummaryText(selectedTags);
+					}
+
+					if (mobileFilterToggleSummary) {
+						mobileFilterToggleSummary.textContent = getMobileToggleSummaryText(selectedTags, searchQuery);
+					}
+
+					if (filterSearchSummary) {
+						filterSearchSummary.hidden = searchQuery.length === 0;
+						filterSearchSummary.textContent = searchQuery
+							? `Search: "${getSearchDisplayText()}"`
+							: "";
+					}
+
+					if (clearSearchButton) {
+						clearSearchButton.hidden = searchQuery.length === 0;
+					}
+
+					if (emptyState) {
+						emptyState.hidden = visibleCount > 0;
+					}
+				}
+
+				function syncSearchUrl(searchQuery: string) {
+					const url = new URL(window.location.href);
+
+					if (searchQuery) {
+						url.searchParams.set(searchQueryParam, getSearchDisplayText());
+					} else {
+						url.searchParams.delete(searchQueryParam);
+					}
+
+					history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
+				}
 
 				function updatePosts() {
 					const selectedTags = filterButtons
-					.filter(btn => btn.classList.contains("selected"))
-					.map(btn => btn.dataset.tag)
-					.filter((tag): tag is string => Boolean(tag));
-
-					localStorage.setItem('selectedTags', JSON.stringify(selectedTags));
-					
-					const posts = Array.from(document.querySelectorAll<HTMLLIElement>("[data-post-card]"));
-					posts.forEach(post => {
-					const postTags = Array.from(post.querySelectorAll<HTMLElement>("[data-post-tag]"))
-						.map(tagEl => tagEl.dataset.postTag)
+						.filter((btn) => btn.classList.contains("selected"))
+						.map((btn) => btn.dataset.tag)
 						.filter((tag): tag is string => Boolean(tag));
-					if (selectedTags.includes("all") || selectedTags.some(tag => postTags.includes(tag))) {
-						post.style.display = "";
-					} else {
-						post.style.display = "none";
-					}
+					const searchQuery = getSearchQuery();
+
+					localStorage.setItem(storageKey, JSON.stringify(selectedTags));
+					syncSearchUrl(searchQuery);
+
+					let visibleCount = 0;
+
+					posts.forEach((post) => {
+						const postTags = Array.from(post.querySelectorAll<HTMLElement>("[data-post-tag]"))
+							.map(tagEl => tagEl.dataset.postTag)
+							.filter((tag): tag is string => Boolean(tag));
+						const matchesTagSelection =
+							selectedTags.includes("all") || selectedTags.some((tag) => postTags.includes(tag));
+						const searchDocument = post.dataset.searchDocument ?? "";
+						const matchesSearch =
+							searchQuery.length === 0 ||
+							searchQuery.split(" ").every((term) => searchDocument.includes(term));
+						const shouldShow = matchesTagSelection && matchesSearch;
+
+						post.hidden = !shouldShow;
+						if (shouldShow) {
+							visibleCount += 1;
+						}
 					});
 
-					if (window.innerWidth > 720) {updateFirstPostClass();}
+					syncButtonState();
+					updateFeaturedPostLayout();
+					updateFilterSummary(selectedTags, visibleCount, searchQuery);
 				}
 
-				// Load tags from localStorage and set the selected tags or default to "all"
-				const savedTags = JSON.parse(localStorage.getItem('selectedTags') || '["all"]') as string[];
-				
-				filterButtons.forEach(b => b.classList.remove("selected")); // Remove selected from all first
+				function restoreSavedSelection() {
+					const availableTags = new Set(
+						filterButtons
+							.map((button) => button.dataset.tag)
+							.filter((tag): tag is string => Boolean(tag)),
+					);
 
-				savedTags.forEach(tag => {
-					const btn = document.querySelector(`.tagButton[data-tag="${tag}"]`);
-					if (btn) btn.classList.add("selected");
-				});
-
-				// Initialize the filter
-				updatePosts();
-
-				filterButtons.forEach(btn => {
-					btn.addEventListener("click", function() {
-					if (this.dataset.tag === "all") {
-						filterButtons.forEach(b => b.classList.remove("selected"));
-						this.classList.add("selected");
-					} else {
-						allTagButton?.classList.remove("selected");
-						this.classList.toggle("selected");
-
-						if (!Array.from(filterButtons).some(b => b.classList.contains("selected"))) {
-						allTagButton?.classList.add("selected");
-						}
+					let savedTags: unknown;
+					try {
+						savedTags = JSON.parse(localStorage.getItem(storageKey) || '["all"]');
+					} catch {
+						savedTags = ["all"];
 					}
 
-					updatePosts();
+					const normalizedSavedTags = Array.isArray(savedTags)
+						? savedTags.filter((tag): tag is string => typeof tag === "string" && availableTags.has(tag))
+						: ["all"];
+
+					filterButtons.forEach((button) => button.classList.remove("selected"));
+
+					normalizedSavedTags.forEach((tag) => {
+						const button = document.querySelector<HTMLButtonElement>(`.tagButton[data-tag="${tag}"]`);
+						button?.classList.add("selected");
+					});
+
+					normalizeSelection();
+				}
+
+				function restoreSearchQuery() {
+					const searchParams = new URLSearchParams(window.location.search);
+					const savedSearchQuery = searchParams.get(searchQueryParam) ?? "";
+
+					if (searchInput) {
+						searchInput.value = savedSearchQuery;
+					}
+				}
+
+				restoreSavedSelection();
+				restoreSearchQuery();
+				syncFilterPanelVisibility();
+				updatePosts();
+
+				filterButtons.forEach((btn) => {
+					btn.addEventListener("click", function() {
+						if (this.dataset.tag === "all") {
+							setAllSelected();
+						} else {
+							allTagButton?.classList.remove("selected");
+							this.classList.toggle("selected");
+							normalizeSelection();
+						}
+
+						updatePosts();
 					});
 				});
+
+				mobileFilterToggle?.addEventListener("click", () => {
+					mobileFiltersOpen = !mobileFiltersOpen;
+					syncFilterPanelVisibility();
 				});
 
-		  </script>
+				emptyStateReset?.addEventListener("click", () => {
+					setAllSelected();
+					if (searchInput) {
+						searchInput.value = "";
+					}
+					updatePosts();
+				});
+
+				searchInput?.addEventListener("input", () => {
+					updatePosts();
+				});
+
+				clearSearchButton?.addEventListener("click", () => {
+					if (searchInput) {
+						searchInput.value = "";
+						searchInput.focus();
+					}
+					updatePosts();
+				});
+
+				window.addEventListener("resize", () => {
+					syncFilterPanelVisibility();
+					updateFeaturedPostLayout();
+				});
+			});
+		</script>
 	</body>
 </html>

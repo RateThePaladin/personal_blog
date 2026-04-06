@@ -132,3 +132,5 @@ test-results/
 .yarn/install-state.gz
 .pnp.*
 .DS_Store
+.obsidian/
+AGENTS.md

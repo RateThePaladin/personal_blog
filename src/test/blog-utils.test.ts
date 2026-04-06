@@ -1,11 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import type { BlogEntry } from '../utils/blog';
 import {
+	buildPostSearchDocument,
 	getHomePosts,
 	getPostPath,
 	getPostSlug,
 	getUniqueTags,
+	matchesSearchQuery,
 	sortPostsForBlogIndex,
+	stripMarkdownForSearch,
 } from '../utils/blog';
 
 function makePost({
@@ -23,6 +26,7 @@ function makePost({
 }): BlogEntry {
 	return {
 		id,
+		body: '',
 		data: {
 			title: id,
 			description: `${id} description`,
@@ -74,27 +78,15 @@ describe('blog utilities', () => {
 		expect(getPostPath('046-pend-tx-api-&&-react')).toBe('/blog/046-pend-tx-api--react/');
 	});
 
-	it('sorts the blog index with featured posts first and newest posts first within each group', () => {
+	it('sorts the blog index newest first regardless of featured status', () => {
 		const sortedPosts = sortPostsForBlogIndex(posts);
-		const firstStandardPostIndex = sortedPosts.findIndex((post) => !post.data.featured);
-		const featuredPosts =
-			firstStandardPostIndex === -1 ? sortedPosts : sortedPosts.slice(0, firstStandardPostIndex);
-		const standardPosts =
-			firstStandardPostIndex === -1 ? [] : sortedPosts.slice(firstStandardPostIndex);
 
-		expect(featuredPosts.every((post) => post.data.featured)).toBe(true);
-
-		for (let index = 1; index < featuredPosts.length; index += 1) {
-			expect(featuredPosts[index - 1].data.pubDate.valueOf()).toBeGreaterThanOrEqual(
-				featuredPosts[index].data.pubDate.valueOf(),
-			);
-		}
-
-		for (let index = 1; index < standardPosts.length; index += 1) {
-			expect(standardPosts[index - 1].data.pubDate.valueOf()).toBeGreaterThanOrEqual(
-				standardPosts[index].data.pubDate.valueOf(),
-			);
-		}
+		expect(sortedPosts.map((post) => post.id)).toEqual([
+			'081-again-with-the-repos',
+			'069-build-a-heroku',
+			'046-pend-tx-api-&&-react',
+			'007-key-management-w_-keychain',
+		]);
 	});
 
 	it('returns home posts newest first', () => {
@@ -116,5 +108,50 @@ describe('blog utilities', () => {
 		expect(tags.length).toBeGreaterThan(0);
 		expect(tags).toEqual([...tags].sort((left, right) => left.localeCompare(right)));
 		expect(new Set(tags).size).toBe(tags.length);
+	});
+
+	it('builds a normalized search document from metadata and markdown content', () => {
+		const searchDocument = buildPostSearchDocument({
+			...makePost({
+				id: '085-fail2banned',
+				pubDate: '2026-04-05',
+				tags: ['Security', 'Cloud'],
+			}),
+			body: `
+# le processus
+
+Cloudflare bans, Telegram alerts, and \`fail2ban-client\`.
+
+![alert](./telegram-alert.png)
+`,
+		});
+
+		expect(searchDocument).toContain('085 fail2banned');
+		expect(searchDocument).toContain('security cloud');
+		expect(searchDocument).toContain('cloudflare bans telegram alerts and fail2ban-client');
+	});
+
+	it('removes markdown formatting noise from searchable content', () => {
+		expect(
+			stripMarkdownForSearch(`
+## heading
+
+> quoted line
+
+Regular [link](https://example.com) and ![[alert.png|Telegram alert]]
+
+\`\`\`bash
+echo "ignored"
+\`\`\`
+`),
+		).toBe('heading quoted line Regular link and Telegram alert');
+	});
+
+	it('matches search queries as normalized multi-word terms', () => {
+		const searchDocument = 'fail2ban cloudflare telegram alerts security';
+
+		expect(matchesSearchQuery(searchDocument, 'fail2ban cloudflare')).toBe(true);
+		expect(matchesSearchQuery(searchDocument, '  Telegram   security ')).toBe(true);
+		expect(matchesSearchQuery(searchDocument, 'proxy xcode')).toBe(false);
 	});
 });
