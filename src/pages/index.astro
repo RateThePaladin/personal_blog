@@ -3,20 +3,11 @@ import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
-
-
 import { getCollection } from 'astro:content';
 import FormattedDate from '../components/FormattedDate.astro';
+import { getHomePosts, getPostPath } from '../utils/blog';
 
-const allPosts = await getCollection('blog');
-
-// Filter only the featured posts
-const featuredPosts = allPosts.filter(post => post.data.home === true);
-
-// Sort the filtered posts
-const sortedFeaturedPosts = featuredPosts.sort((b, a) => {
-  return a.data.pubDate.valueOf() - b.data.pubDate.valueOf();
-});
+const sortedFeaturedPosts = getHomePosts(await getCollection('blog'));
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -181,23 +172,23 @@ const sortedFeaturedPosts = featuredPosts.sort((b, a) => {
 			<br>
 			<section>
 				<ul>
-					{
-						sortedFeaturedPosts.map((post) => (
-							<li>
-								<a href={`/blog/${post.slug}/`}>
-									<img width={720} height={360} src={post.data.heroImage} alt="" />
-									<h4 class="title">{post.data.title}</h4>
+						{
+							sortedFeaturedPosts.map((post) => (
+								<li data-home-post-card>
+									<a href={getPostPath(post.id)}>
+										<img width={720} height={360} src={post.data.heroImage} alt="" />
+										<h4 class="title">{post.data.title}</h4>
 									 
 									<div class="date-and-tags">
 										<div class="date">
 											<FormattedDate date={post.data.pubDate} />
-										</div>
-										<div class="tag-container">
-											{post.data.tags.map((tag) => (
-											<div class="tag">
-												#{tag}
 											</div>
-											))}
+											<div class="tag-container">
+												{post.data.tags.map((tag) => (
+												<div class="tag" data-post-tag={tag}>
+													#{tag}
+												</div>
+												))}
 										</div>
 									</div>
 										

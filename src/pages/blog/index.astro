@@ -5,30 +5,10 @@ import Footer from '../../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
 import { getCollection } from 'astro:content';
 import FormattedDate from '../../components/FormattedDate.astro';
+import { getPostPath, getUniqueTags, sortPostsForBlogIndex } from '../../utils/blog';
 
-const posts = (await getCollection('blog')).sort(
-(b, a) => {
-  // First, sort by featured status
-  if (a.data.featured && !b.data.featured) {
-    return 1;
-  }
-  if (!a.data.featured && b.data.featured) {
-    return -1;
-  }
-  return a.data.pubDate.valueOf() - b.data.pubDate.valueOf();
-}
-);
-
-// Collect unique tags from all posts
-const uniqueTags = new Set();
-posts.forEach(post => {
-  if (post.data.tags) {
-    post.data.tags.forEach(tag => uniqueTags.add(tag));
-  }
-});
-
-// Convert Set to Array for easier use later
-const tagsArray = Array.from(uniqueTags);
+const posts = sortPostsForBlogIndex(await getCollection('blog'));
+const tagsArray = getUniqueTags(posts);
 ---
 
 <!DOCTYPE html>
@@ -212,20 +192,20 @@ const tagsArray = Array.from(uniqueTags);
 	<body>
 		<Header />
 		<main>
-			<section>
+				<section>
 
 				<div id="tagFilterButtons">
-					<button id="tagButton-all" class="tagButton selected" data-tag="all">#all</button>
+					<button id="tagButton-all" class="tagButton selected" type="button" data-tag="all">#all</button>
 					{tagsArray.map((tag: string) => (
-					<button class="tagButton" data-tag={tag}>#{tag}</button>
+					<button class="tagButton" type="button" data-tag={tag}>#{tag}</button>
 					))}
 				</div>
 				<hr class="divider">
 				<ul>
 					{
 						posts.map((post) => (
-							<li>
-								<a href={`/blog/${post.slug}/`}>
+							<li data-post-card>
+								<a href={getPostPath(post.id)}>
 									<img src={post.data.heroImage} alt="" />
 									<h4 class="title">{post.data.title}</h4>
 									 
@@ -235,7 +215,7 @@ const tagsArray = Array.from(uniqueTags);
 										</div>
 										<div class="tag-container">
 											{post.data.tags.map((tag) => (
-											<div class="tag">
+											<div class="tag" data-post-tag={tag}>
 												#{tag}
 											</div>
 											))}
@@ -252,46 +232,45 @@ const tagsArray = Array.from(uniqueTags);
 		<Footer />
 		<script>
 			document.addEventListener("DOMContentLoaded", function() {
-
-				// new goes here
-
 				function updateFirstPostClass() {
 					// Remove any existing "first-child" class
-					const existingFirst = document.querySelector(".first-child");
+					const existingFirst = document.querySelector<HTMLLIElement>(".first-child");
 					if (existingFirst) {
 						existingFirst.classList.remove("first-child");
-						const existingDateAndTags = existingFirst.querySelector(".date-and-tags");
+						const existingDateAndTags = existingFirst.querySelector<HTMLElement>(".date-and-tags");
 						if (existingDateAndTags) {
 						existingDateAndTags.style.justifyContent = 'space-between';
 						}
 					}
 
 					// Add the "first-child" class to the first visible li
-					const posts = Array.from(document.querySelectorAll("li"));
+					const posts = Array.from(document.querySelectorAll<HTMLLIElement>("[data-post-card]"));
 					const firstVisiblePost = posts.find(post => post.style.display !== "none");
 					if (firstVisiblePost) {
 						firstVisiblePost.classList.add("first-child");
-						const dateAndTags = firstVisiblePost.querySelector(".date-and-tags");
+						const dateAndTags = firstVisiblePost.querySelector<HTMLElement>(".date-and-tags");
 						if (dateAndTags) {
 						dateAndTags.style.justifyContent = 'center';
 						}
 					}
 				}
 
-					// old and working
-				const filterButtons = document.querySelectorAll(".tagButton");
+				const filterButtons = Array.from(document.querySelectorAll<HTMLButtonElement>(".tagButton"));
 				const allTagButton = document.getElementById("tagButton-all");
 
 				function updatePosts() {
-					const selectedTags = Array.from(filterButtons)
+					const selectedTags = filterButtons
 					.filter(btn => btn.classList.contains("selected"))
-					.map(btn => btn.dataset.tag);
+					.map(btn => btn.dataset.tag)
+					.filter((tag): tag is string => Boolean(tag));
 
 					localStorage.setItem('selectedTags', JSON.stringify(selectedTags));
 					
-					const posts = Array.from(document.querySelectorAll("li"));
+					const posts = Array.from(document.querySelectorAll<HTMLLIElement>("[data-post-card]"));
 					posts.forEach(post => {
-					const postTags = Array.from(post.querySelectorAll(".tag")).map(tagEl => tagEl.textContent.trim().substring(1));
+					const postTags = Array.from(post.querySelectorAll<HTMLElement>("[data-post-tag]"))
+						.map(tagEl => tagEl.dataset.postTag)
+						.filter((tag): tag is string => Boolean(tag));
 					if (selectedTags.includes("all") || selectedTags.some(tag => postTags.includes(tag))) {
 						post.style.display = "";
 					} else {
@@ -303,7 +282,7 @@ const tagsArray = Array.from(uniqueTags);
 				}
 
 				// Load tags from localStorage and set the selected tags or default to "all"
-				const savedTags = JSON.parse(localStorage.getItem('selectedTags') || '["all"]');
+				const savedTags = JSON.parse(localStorage.getItem('selectedTags') || '["all"]') as string[];
 				
 				filterButtons.forEach(b => b.classList.remove("selected")); // Remove selected from all first
 
@@ -321,11 +300,11 @@ const tagsArray = Array.from(uniqueTags);
 						filterButtons.forEach(b => b.classList.remove("selected"));
 						this.classList.add("selected");
 					} else {
-						allTagButton.classList.remove("selected");
+						allTagButton?.classList.remove("selected");
 						this.classList.toggle("selected");
 
 						if (!Array.from(filterButtons).some(b => b.classList.contains("selected"))) {
-						allTagButton.classList.add("selected");
+						allTagButton?.classList.add("selected");
 						}
 					}
 
@@ -334,7 +313,6 @@ const tagsArray = Array.from(uniqueTags);
 				});
 				});
 
-		  </script>
 		  </script>
 	</body>
 </html>

@@ -51,12 +51,12 @@ workflows:
 jobs:
   build:
     machine: true
-    resource_class: dubdubdub-xyz/dubhub
+    resource_class: <custom-runner-class>
     steps:
       - checkout
       - add_ssh_keys:
           fingerprints:
-            - "5e:16:bb:b6:2b:e4:19:16:04:ad:34:f2:af:e7:23:c6"
+            - "<redacted-ssh-key-fingerprint>"
       - run:
           name: Archive Application
           command: cd dub && xcodebuild -scheme dub archive -archivePath build/Release/archive/Archive.xcarchive -configuration Release OTHER_CODE_SIGN_FLAGS\=--timestamp CODE_SIGN_INJECT_BASE_ENTITLEMENTS=No
@@ -92,7 +92,7 @@ jobs:
           command: cd /var/opt/circleci/workdir/dub/SparkleForSwift && ./bin/generate_appcast /var/opt/circleci/workdir/dub/build/Release/app/Sparkle
       - run: # Deploy to S3 using the sync command
             name: Deploy to S3
-            command: aws s3 sync /var/opt/circleci/workdir/dub/build/Release/app/Sparkle s3://circle-ci-dub-master
+            command: aws s3 sync /var/opt/circleci/workdir/dub/build/Release/app/Sparkle s3://<release-bucket>
 
 ```
 

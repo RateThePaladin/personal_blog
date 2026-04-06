@@ -17,7 +17,7 @@ heroImage: /images/11/hero.png
 https://github.com/dubdubdub-xyz/web3.swift-keychain
 
 ### raison d'être
-Hey yall. This week's project is a continuation of last week's private key management with Apple keychain experiment. The link to that can be found [here](https://cms.experiments.gg/admin/content-manager/collectionType/api::experiment.experiment/42). In brief, Argent's web3.swift package we're using for the browser has a default insecure key storage implementation. I'm fixing that by saving an encrypted key to Apple's keychain.
+Hey yall. This week's project is a continuation of last week's private key management with Apple keychain experiment. The earlier post is [here](/blog/007-key-management-w_-keychain/). In brief, Argent's web3.swift package we're using for the browser has a default insecure key storage implementation. I'm fixing that by saving an encrypted key to Apple's keychain.
 
 ### le processus
 At the end of the last experiment, we could write content to and read content from the keychain. This was a great starting point, but we have a ways to go. The next thing we need to implement is the ability to get all Ethereum account addresses that our application has created. This functionality was needed to support the 'get accounts' function that web3.swift relies on to import saved accounts between restarts or reinstalls. This created some challenges, both in getting the metadata (and not the password)assigned to a keychain entry, as well as parsing all keychain entries into an array of strings that can be returned upwards of three or more levels. Check out the EthereumKeyStorage.swift file for details, but here's that keychain function:
