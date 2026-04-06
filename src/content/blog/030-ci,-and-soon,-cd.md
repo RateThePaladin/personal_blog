@@ -46,7 +46,7 @@ workflows:
 jobs:
   build:
     machine: true
-    resource_class: dubdubdub-xyz/dubhub
+    resource_class: <custom-runner-class>
     steps:
       - checkout
       - run:

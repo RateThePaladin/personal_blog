@@ -37,11 +37,11 @@ workflows:
 jobs:
   betaBuild:
     machine: true
-    resource_class: dubdubdub-xyz/dubhub
+    resource_class: <custom-runner-class>
     steps:
       - add_ssh_keys:
           fingerprints:
-            - "5e:16:bb:b6:2b:e4:19:16:04:ad:34:f2:af:e7:23:c6"
+            - "<redacted-ssh-key-fingerprint>"
       - checkout
       - run:
           name: Archive Application
@@ -91,7 +91,7 @@ jobs:
           command: cd /var/opt/circleci/workdir/dub/build/Release/app && cp dub_beta.dmg SparkleStaging
       - run: # Deploy to S3 using the sync command
             name: Deploy to S3
-            command: aws s3 sync /var/opt/circleci/workdir/dub/build/Release/app/SparkleStaging s3://downloads.dubdubdub.xyz
+            command: aws s3 sync /var/opt/circleci/workdir/dub/build/Release/app/SparkleStaging s3://<download-bucket>
             
             
 
@@ -100,9 +100,9 @@ jobs:
 A couple of cool things here. First, you'll notice the new actions to generate the .dmg of our application. This offers users a cool-looking installer pictured at the top of the post. It also maintains the .zip pipeline in parallel so that Sparkle can handle updates automatically. The DMG below was generated using this code.
 ![dmg](https://i.imgur.com/nttqDPJ.jpeg)
 
-Additionally, we're using a new s3 bucket named downloads.dubdubdub.xyz. This new bucket will allow us to host all our images while connected to our domain. Cloudflare is also providing caching, proxying, and access controls for this domain, which will save us a whole bunch of bandwidth. This is especially important as Sparkle now automatically checks for updates and downloads them in the background. Rather than making AWS manage this traffic (expensive), Cloudflare can cache some of our data to serve out to clients. We also get the all-important DDOS protection that Cloudflare is famous for. 
+Additionally, we're using a new s3 bucket for downloads. This bucket lets us host our images while connected to our domain. Cloudflare is also providing caching, proxying, and access controls for this domain, which will save us a whole bunch of bandwidth. This is especially important as Sparkle now automatically checks for updates and downloads them in the background. Rather than making AWS manage this traffic (expensive), Cloudflare can cache some of our data to serve out to clients. We also get the all-important DDOS protection that Cloudflare is famous for. 
 
-Now we're on to the fun stuff! It's time that we created one version of the app that will auto-update when we push new versions weekly. That's right, you no longer have to return to the experiments site to get your weekly dose of dub! When you first launch the app, it will now ask if you would like to automatically check for updates. Looks like this:
+Now we're on to the fun stuff! It's time that we created one version of the app that will auto-update when we push new versions weekly. That's right, you no longer have to manually grab a fresh build every week to get your weekly dose of dub! When you first launch the app, it will now ask if you would like to automatically check for updates. Looks like this:
 ![check for updates](https://i.imgur.com/rZAWfTI.png)
 
 Clicking yes will automatically check for updates periodically by querying our appcast.xml file. This is basically just a list of all the versions of dub and their corresponding download URLs. For the curious, here's what that looks like as of 2/15/23:

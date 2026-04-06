@@ -1,68 +1,66 @@
-# Astro Starter Kit: Blog
+# Robert's Blog
 
-```
-npm create astro@latest -- --template blog
-```
+Personal site and blog built with Astro 6.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/blog)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/blog)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/blog/devcontainer.json)
+## Requirements
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+- Node `22.12.0` or newer
+- npm
 
-![blog](https://github.com/withastro/astro/assets/2244813/ff10799f-a816-4703-b967-c78997e8323d)
+The repo includes an `.nvmrc` file so the expected Node version is easy to match locally and in CI.
 
-Features:
+## Setup
 
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and OpenGraph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```
-├── public/
-├── src/
-│   ├── components/
-│   ├── content/
-│   ├── layouts/
-│   └── pages/
-├── astro.config.mjs
-├── README.md
-├── package.json
-└── tsconfig.json
+```bash
+npm install
+npx playwright install chromium
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+The Playwright install step is only needed once per machine for browser-based tests.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+## Scripts
 
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
+- `npm run dev` starts the local Astro dev server
+- `npm run build` creates the production build in `dist/`
+- `npm run preview` serves the built site locally
+- `npm run check` runs Astro's type and content checks
+- `npm run import:obsidian -- /path/to/note.md` imports an Obsidian note and copies its local images into the site
+- `npm run test:unit` runs the Vitest suite
+- `npm run test:e2e` builds the site and runs the Playwright smoke tests
+- `npm test` runs the full verification flow: checks, unit tests, and e2e tests
 
-Any static assets, like images, can be placed in the `public/` directory.
+## Content
 
-## 🧞 Commands
+- Blog posts live in `src/content/blog/`
+- Content collections are configured in `src/content.config.ts`
+- Shared blog helpers live in `src/utils/blog.ts`
+- Static images and fonts live in `public/`
 
-All commands are run from the root of the project, from a terminal:
+## Obsidian Workflow
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:3000`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+The easiest setup is to keep your Obsidian vault outside this repo and import finished drafts into the site.
 
-## 👀 Want to learn more?
+Recommended note shape:
 
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- Start from `templates/obsidian-post.md`
+- Keep images next to the note or in an Obsidian attachments folder
+- Use either markdown images like `![Alt](assets/screenshot.png)` or Obsidian embeds like `![[assets/screenshot.png|Alt]]`
+- Set `heroImage` to a local file path such as `assets/hero.png`
 
-## Credit
+Import a draft:
 
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+```bash
+npm run import:obsidian -- /absolute/path/to/My\ Draft.md --slug my-draft
+```
+
+Optional flags:
+
+- `--attachments-dir /absolute/path/to/attachments` lets the importer resolve images from a shared Obsidian attachments folder
+- `--overwrite` replaces an existing imported post with the same slug
+
+What the importer does:
+
+- Copies local note images into `public/images/posts/<slug>/`
+- Rewrites article image links to the blog's public image paths
+- Rewrites a relative `heroImage` frontmatter value to the copied public image path
+- Warns if required blog frontmatter is missing
