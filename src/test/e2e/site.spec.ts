@@ -6,6 +6,8 @@ test('the home page loads featured posts', async ({ page }) => {
 	await expect(page).toHaveTitle("Robert's Blog");
 	await expect(page.getByRole('heading', { name: /hello, world/i })).toBeVisible();
 	expect(await page.locator('[data-home-post-card]').count()).toBeGreaterThan(0);
+	await expect(page.locator('[data-home-post-card]').first().locator('.title')).toContainText(/fail2banned/i);
+	await expect(page.getByRole('link', { name: /key management w\/ keychain/i })).toHaveCount(0);
 });
 
 test('the blog tag filter only shows posts with the selected tag', async ({ page }) => {

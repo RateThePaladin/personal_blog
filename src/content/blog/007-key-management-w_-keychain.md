@@ -10,7 +10,6 @@ tags:
 description: description
 heroImage: /images/7/hero.png
 featured: true
-home: true
 ---
 <!-- # Private Key Management w/ Apple Keychain -->
 
